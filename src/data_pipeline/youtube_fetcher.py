@@ -107,11 +107,24 @@ class YouTubeFetcher:
                 'outtmpl': str(self.output_dir / safe_title),
                 'quiet': False,
                 'no_warnings': False,
+                # Try to bypass bot detection in GitHub Actions
+                'nocheckcertificate': True,
+                'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'referer': 'https://www.google.com/',
+                'extractor_args': {
+                    'youtube': {
+                        'player_client': ['android_vr', 'web_embedded'],
+                        'skip': ['dash', 'hls'],
+                    }
+                },
+                'ignoreerrors': True, # Skip errors like members-only
             }
             
             logger.info(f"Downloading audio from: {video_url}")
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([video_url])
+                error_code = ydl.download([video_url])
+                if error_code != 0:
+                    logger.warning(f"Download failed with error code {error_code} for {video_url}")
             
             if audio_path.exists():
                 logger.info(f"Audio saved to: {audio_path}")

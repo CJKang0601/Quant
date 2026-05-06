@@ -27,7 +27,7 @@ YOUTUBE_CHANNELS = {
 }
 
 PODCAST_FEEDS = {
-    "gooaye_podcast": "https://feeds.soundon.fm/podcasts/7f70ff38-ac90-449e-8c7c-487770830720.xml",  # 股癌 Podcast RSS
+    "gooaye_podcast": "https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml",  # 股癌 Podcast RSS 正確位址
 }
 
 # Processing Settings

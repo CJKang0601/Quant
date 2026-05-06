@@ -39,8 +39,8 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         mkdir -p data/processed
-        if [ -n "$(ls -A data/processed/*.json 2>/dev/null)" ]; then
-          git add data/processed/*.json
+        if [ -n "$(ls -A data/processed/analysis_*.json 2>/dev/null)" ]; then
+          git add -f data/processed/analysis_*.json
           git commit -m "chore: auto-update analysis data [skip ci]" || echo "No changes to commit"
           git push
         else

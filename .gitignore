@@ -8,9 +8,12 @@ env/
 
 # Data
 data/raw/
-data/processed/*.json
-data/processed/*.csv
 data/processed/chromadb/
+# Ignore all processed data by default
+data/processed/*
+# BUT allow analysis results
+!data/processed/analysis_*.json
+!data/processed/*.csv
 
 # OS
 .DS_Store

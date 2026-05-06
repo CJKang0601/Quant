@@ -1,0 +1,83 @@
+# 財經黑話映射表 (Financial Jargon Mapping)
+# Format: "黑話" -> ["股票代碼", "公司名稱", "別名1", "別名2"]
+
+台灣股票:
+  "發哥":
+    ticker: "2454.TW"
+    name: "聯發科"
+    aliases: ["聯發科", "MTK"]
+  
+  "GG":
+    ticker: "2330.TW"
+    name: "台積電"
+    aliases: ["台積電", "TSMC", "台積", "老蛤蟆"]
+  
+  "老謝":
+    ticker: "2330.TW"
+    name: "台積電"
+    aliases: ["台積電", "TSMC"]
+  
+  "AI 教父":
+    ticker: "2330.TW"
+    name: "台積電"
+    aliases: ["台積電", "TSMC"]
+  
+  "榜哥":
+    ticker: "3045.TW"
+    name: "台灣大"
+    aliases: ["台灣大", "TWM"]
+  
+  "鴻家族":
+    ticker: "2317.TW"
+    name: "鴻海"
+    aliases: ["鴻海", "鴻寶", "AAPL supply chain"]
+  
+  "宏碁":
+    ticker: "2353.TW"
+    name: "宏碁"
+    aliases: ["Acer", "ACE"]
+  
+  "台達":
+    ticker: "2308.TW"
+    name: "台達電"
+    aliases: ["台達電", "Delta Electronics"]
+
+美股:
+  "NVDA":
+    ticker: "NVDA"
+    name: "NVIDIA"
+    aliases: ["黃仁勳", "AI 晶片教父"]
+  
+  "TSLA":
+    ticker: "TSLA"
+    name: "Tesla"
+    aliases: ["馬斯克", "特斯拉"]
+  
+  "AAPL":
+    ticker: "AAPL"
+    name: "Apple"
+    aliases: ["蘋果", "庫克"]
+  
+  "MSFT":
+    ticker: "MSFT"
+    name: "Microsoft"
+    aliases: ["微軟", "OpenAI 金主"]
+
+產業術語:
+  "AI Server":
+    industries: ["半導體", "電子製造"]
+    related_tickers: ["2330.TW", "2454.TW", "NVDA"]
+  
+  "CoWoS":
+    industries: ["半導體", "IC 設計"]
+    description: "晶圓代工先進技術"
+    related_tickers: ["2330.TW"]
+  
+  "HBM":
+    industries: ["半導體記憶體"]
+    description: "高頻寬記憶體"
+    related_tickers: ["2330.TW"]
+  
+  "供應鏈":
+    industries: ["電子製造"]
+    related_tickers: ["2317.TW"]

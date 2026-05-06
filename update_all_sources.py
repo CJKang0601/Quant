@@ -20,7 +20,7 @@ def update_all():
         print(f"Checking YouTube source: {source_key} ({channel_url})")
         try:
             # 獲取最新影片並下載音訊
-            audio_files = pipeline.youtube_fetcher.fetch_and_download(channel_url, max_results=1)
+            audio_files = pipeline.youtube_fetcher.fetch_and_download(channel_url, max_results=5)
             print(f"Found {len(audio_files)} new audio files for {source_key}")
             
             for idx, audio_path in enumerate(audio_files):
@@ -54,7 +54,7 @@ def update_all():
     for source_key, feed_url in PODCAST_FEEDS.items():
         logger.info(f"Updating Podcast source: {source_key}")
         try:
-            audio_files = pipeline.podcast_fetcher.fetch_and_download(feed_url, max_episodes=1)
+            audio_files = pipeline.podcast_fetcher.fetch_and_download(feed_url, max_episodes=5)
             
             for idx, audio_path in enumerate(audio_files):
                 result = pipeline.data_pipeline.process_audio_file(

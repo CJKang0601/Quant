@@ -140,12 +140,17 @@ class PodcastFetcher:
         episodes = self.fetch_feed(feed_url, max_episodes)
         audio_files = []
         
+        import time
         for episode in episodes:
             if episode['audio_url']:
                 audio_path = self.download_episode(episode['audio_url'], episode['title'])
                 if audio_path:
                     audio_files.append(audio_path)
                     logger.info(f"Successfully processed: {episode['title']}")
+                
+                # 增加延遲避免被 Ban
+                logger.info("Sleeping for 5 seconds between podcast downloads...")
+                time.sleep(5)
         
         logger.info(f"Downloaded {len(audio_files)} podcast episodes")
         return audio_files

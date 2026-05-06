@@ -151,11 +151,16 @@ class YouTubeFetcher:
         videos = self.fetch_latest_from_channel(channel_url, max_results)
         audio_files = []
         
+        import time
         for video in videos:
             audio_path = self.download_audio(video['url'], video['title'])
             if audio_path:
                 audio_files.append(audio_path)
                 logger.info(f"Successfully processed: {video['title']}")
+            
+            # 增加延遲避免被 Ban
+            logger.info("Sleeping for 5 seconds between downloads...")
+            time.sleep(5)
         
         logger.info(f"Downloaded {len(audio_files)} audio files")
         return audio_files

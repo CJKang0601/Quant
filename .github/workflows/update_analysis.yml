@@ -29,9 +29,8 @@ jobs:
 
     - name: Run update script
       env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        # 如果需要其他 Key 也可以在此加入
+        OPENAI_API_KEY: ${{ secrets.OPEN_AI_KEY }}
+        GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: |
         python update_all_sources.py
 

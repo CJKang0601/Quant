@@ -21,8 +21,8 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
 # Data Sources
 YOUTUBE_CHANNELS = {
-    "hao": "https://www.youtube.com/@HaoGeMorningLive/videos",  # 財經皓角
-    "market_anchor": "https://www.youtube.com/@market-anchor/videos",  # 市場錨定
+    "hao": "https://www.youtube.com/@yutinghaofinance/videos",  # 游庭皓的財經皓角
+    "market_anchor": "https://www.youtube.com/@marketanchors/videos",  # 市場錨定
 }
 
 PODCAST_FEEDS = {

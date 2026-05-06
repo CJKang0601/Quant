@@ -36,7 +36,14 @@ class PodcastFetcher:
         """
         try:
             logger.info(f"Fetching feed from: {feed_url}")
-            feed = feedparser.parse(feed_url)
+            # Use requests with User-Agent to avoid being blocked
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+            response = requests.get(feed_url, headers=headers, timeout=30)
+            response.raise_for_status()
+            
+            feed = feedparser.parse(response.content)
             
             if feed.bozo:
                 logger.warning(f"Feed parsing issues: {feed.bozo_exception}")

@@ -5,10 +5,11 @@ langchain-google-genai>=1.0.7
 llama-index>=0.9.48
 
 # Audio Processing
-yt-dlp==2024.3.10
-feedparser==6.0.10
-openai-whisper==20231117
-faster-whisper==0.10.0
+yt-dlp>=2024.3.10
+feedparser>=6.0.10
+openai-whisper
+setuptools
+faster-whisper>=0.10.0
 
 # Data Processing
 pandas==2.2.0

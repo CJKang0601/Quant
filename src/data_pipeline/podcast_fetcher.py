@@ -43,7 +43,8 @@ class PodcastFetcher:
             response = requests.get(feed_url, headers=headers, timeout=30)
             response.raise_for_status()
             
-            feed = feedparser.parse(response.content)
+            # Use text instead of content to avoid encoding/malformed issues
+            feed = feedparser.parse(response.text)
             
             if feed.bozo:
                 logger.warning(f"Feed parsing issues: {feed.bozo_exception}")

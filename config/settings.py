@@ -22,11 +22,12 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 # Data Sources
 YOUTUBE_CHANNELS = {
     "hao": "https://www.youtube.com/@yutinghaofinance/videos",  # 游庭皓的財經皓角
-    "market_anchor": "https://www.youtube.com/@marketanchors/videos",  # 市場錨定
+    "gooaye": "https://www.youtube.com/@Gooaye/videos",  # 股癌 YouTube
+    "market_anchor": "https://www.youtube.com/@%E5%AE%9A%E9%8C%A8%E7%94%A2%E6%A5%AD%E7%AD%86%E8%A8%98/videos",  # 定錨產業筆記
 }
 
 PODCAST_FEEDS = {
-    "gooaye": "https://feeds.soundon.fm/podcasts/7f70ff38-ac90-449e-8c7c-487770830720.xml",  # 股癌 RSS
+    "gooaye_podcast": "https://feeds.soundon.fm/podcasts/7f70ff38-ac90-449e-8c7c-487770830720.xml",  # 股癌 Podcast RSS
 }
 
 # Processing Settings

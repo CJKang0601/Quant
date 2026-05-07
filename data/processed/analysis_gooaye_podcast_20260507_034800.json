@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-05-07 03:48:00.805238",
+  "sources": [
+    "EP656"
+  ],
+  "macro_view": {
+    "overall_sentiment": 7.75,
+    "key_drivers": [
+      "Market volatility"
+    ],
+    "global_outlook": null
+  },
+  "industry_trends": [
+    {
+      "industry_name": "Semiconductors",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Investment increase",
+        "Policy changes",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    },
+    {
+      "industry_name": "Artificial Intelligence",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Investment increase",
+        "Policy changes",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    },
+    {
+      "industry_name": "Software",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Investment increase",
+        "Policy changes",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    },
+    {
+      "industry_name": "Banking",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Investment increase",
+        "Policy changes",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    }
+  ],
+  "recommendations": [],
+  "key_risks": [
+    "Market risk"
+  ],
+  "risk_management": {
+    "overall_exposure_limit": "60%",
+    "suggested_stop_loss": "-8%",
+    "suggested_take_profit": null
+  },
+  "raw_analysis": null,
+  "metadata": {
+    "source_id": "gooaye_podcast_3",
+    "entity_count": 0
+  }
+}

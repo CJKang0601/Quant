@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-05-07 03:56:25.288167",
+  "sources": [
+    "EP655"
+  ],
+  "macro_view": {
+    "overall_sentiment": 6.727272727272727,
+    "key_drivers": [
+      "Economic growth"
+    ],
+    "global_outlook": null
+  },
+  "industry_trends": [
+    {
+      "industry_name": "Technology",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Investment increase",
+        "Increased competition",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    }
+  ],
+  "recommendations": [],
+  "key_risks": [
+    "Market risk",
+    "Competitive pressure"
+  ],
+  "risk_management": {
+    "overall_exposure_limit": "60%",
+    "suggested_stop_loss": "-8%",
+    "suggested_take_profit": null
+  },
+  "raw_analysis": null,
+  "metadata": {
+    "source_id": "gooaye_podcast_4",
+    "entity_count": 0
+  }
+}

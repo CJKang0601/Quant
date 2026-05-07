@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-05-07 01:41:30.841090",
+  "sources": [
+    "EP658"
+  ],
+  "macro_view": {
+    "overall_sentiment": 7.0,
+    "key_drivers": [
+      "Interest rate movements"
+    ],
+    "global_outlook": null
+  },
+  "industry_trends": [
+    {
+      "industry_name": "Artificial Intelligence",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Growth opportunity",
+        "Investment increase",
+        "Increased competition"
+      ],
+      "growth_drivers": []
+    },
+    {
+      "industry_name": "Software",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Growth opportunity",
+        "Investment increase",
+        "Increased competition"
+      ],
+      "growth_drivers": []
+    }
+  ],
+  "recommendations": [
+    {
+      "ticker": "AI",
+      "action": "BUY",
+      "reason": "樂觀: 歡迎收聽古矮為聲夢高音本集節目由Noir的VPN贊助屬下旅遊忘記即將到來現在正式提前規劃家庭旅遊的好時機面對貴倉倉的機票不少人會透過NoirVPN切換不同地區來比價這也是規劃旅遊時最實用的技巧在查詢機",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "DON",
+      "action": "BUY",
+      "reason": "樂觀: 歡迎收聽古矮為聲夢高音本集節目由Noir的VPN贊助屬下旅遊忘記即將到來現在正式提前規劃家庭旅遊的好時機面對貴倉倉的機票不少人會透過NoirVPN切換不同地區來比價這也是規劃旅遊時最實用的技巧在查詢機",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "S",
+      "action": "BUY",
+      "reason": "樂觀: 歡迎收聽古矮為聲夢高音本集節目由Noir的VPN贊助屬下旅遊忘記即將到來現在正式提前規劃家庭旅遊的好時機面對貴倉倉的機票不少人會透過NoirVPN切換不同地區來比價這也是規劃旅遊時最實用的技巧在查詢機",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    }
+  ],
+  "key_risks": [
+    "Market risk",
+    "Regulatory risks",
+    "Competitive pressure"
+  ],
+  "risk_management": {
+    "overall_exposure_limit": "60%",
+    "suggested_stop_loss": "-8%",
+    "suggested_take_profit": null
+  },
+  "raw_analysis": null,
+  "metadata": {
+    "source_id": "gooaye_podcast_1",
+    "entity_count": 3
+  }
+}

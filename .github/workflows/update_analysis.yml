@@ -43,8 +43,5 @@ jobs:
         git config --local user.name "github-actions[bot]"
         mkdir -p data/processed docs
         git add -f data/processed/analysis_*.json docs/index.html
-          git commit -m "chore: auto-update analysis data [skip ci]" || echo "No changes to commit"
-          git push
-        else
-          echo "No JSON files found in data/processed/, skipping commit."
-        fi
+        git commit -m "chore: auto-update analysis data [skip ci]" || echo "No changes to commit"
+        git push

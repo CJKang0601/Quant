@@ -174,14 +174,14 @@ class OutputFormatter:
         summary = {
             "timestamp": analysis_result.timestamp.isoformat(),
             "sources_count": len(analysis_result.sources),
-            "macro_sentiment": analysis_result.macro_view.overall_sentiment if analysis_result.macro_view else None,
+            "macro_sentiment": round(analysis_result.macro_view.overall_sentiment, 2) if analysis_result.macro_view else None,
             "industry_count": len(analysis_result.industry_trends),
             "recommendations_count": len(analysis_result.recommendations),
             "buy_count": sum(1 for r in analysis_result.recommendations if r.action == "BUY"),
             "sell_count": sum(1 for r in analysis_result.recommendations if r.action == "SELL"),
             "hold_count": sum(1 for r in analysis_result.recommendations if r.action == "HOLD"),
             "avg_confidence": (
-                sum(r.confidence_score for r in analysis_result.recommendations) / len(analysis_result.recommendations)
+                round(sum(r.confidence_score for r in analysis_result.recommendations) / len(analysis_result.recommendations), 2)
                 if analysis_result.recommendations else 0
             ),
             "risk_count": len(analysis_result.key_risks),

@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-05-07 02:20:40.959098",
+  "sources": [
+    "EP659"
+  ],
+  "macro_view": {
+    "overall_sentiment": 8.5,
+    "key_drivers": [
+      "Market volatility"
+    ],
+    "global_outlook": null
+  },
+  "industry_trends": [
+    {
+      "industry_name": "Artificial Intelligence",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Growth opportunity",
+        "Investment increase",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    },
+    {
+      "industry_name": "Software",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Growth opportunity",
+        "Investment increase",
+        "Technology advancement"
+      ],
+      "growth_drivers": []
+    }
+  ],
+  "recommendations": [
+    {
+      "ticker": "CPU",
+      "action": "BUY",
+      "reason": "非常樂觀: 歡迎收聽古癌 我也先問高文本集節目由Sally贊助5月這個時間點滿有趣的 親民聯價勞動節剛過大家的狀態大概是前花玩的體力也還沒有回來但我相信已經有人在偷看 端午夜保請假把他湊長一點簡單講 人還在上班 ",
+      "confidence_score": 0.6,
+      "target_price": null,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "ticker": "AI",
+      "action": "BUY",
+      "reason": "非常樂觀: 歡迎收聽古癌 我也先問高文本集節目由Sally贊助5月這個時間點滿有趣的 親民聯價勞動節剛過大家的狀態大概是前花玩的體力也還沒有回來但我相信已經有人在偷看 端午夜保請假把他湊長一點簡單講 人還在上班 ",
+      "confidence_score": 0.6,
+      "target_price": null,
+      "risk_level": "MEDIUM"
+    }
+  ],
+  "key_risks": [
+    "General market uncertainty"
+  ],
+  "risk_management": {
+    "overall_exposure_limit": "60%",
+    "suggested_stop_loss": "-8%",
+    "suggested_take_profit": null
+  },
+  "raw_analysis": null,
+  "metadata": {
+    "source_id": "gooaye_podcast_0",
+    "entity_count": 2
+  }
+}

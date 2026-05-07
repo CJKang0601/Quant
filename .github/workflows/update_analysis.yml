@@ -8,6 +8,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write    # 允許 Actions 推送代碼更新到倉庫
     
     steps:
     - name: Checkout repository

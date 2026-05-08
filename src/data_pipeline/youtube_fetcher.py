@@ -27,13 +27,6 @@ class YouTubeFetcher:
     def fetch_latest_from_channel(self, channel_url: str, max_results: int = 5) -> List[Dict[str, Any]]:
         """
         Fetch latest videos from a YouTube channel.
-        
-        Args:
-            channel_url: YouTube channel URL
-            max_results: Maximum number of videos to fetch
-            
-        Returns:
-            List of video info dicts with 'url', 'title', 'date', 'video_id'
         """
         try:
             import yt_dlp
@@ -42,32 +35,64 @@ class YouTubeFetcher:
             return []
         
         try:
+            # Handle Hao's channel specifically to get public livestream replays
+            target_urls = [channel_url]
+            if "@yutinghaofinance" in channel_url:
+                # Hao's channel: 'Videos' are members-only, 'Streams' are public replays
+                target_urls.append(channel_url.replace("/videos", "/streams"))
+
+            videos = []
+            seen_ids = set()
+
             ydl_opts = {
-                'quiet': False,
-                'no_warnings': False,
+                'quiet': True,
+                'no_warnings': True,
                 'extract_flat': 'in_playlist',
                 'skip_unavailable_videos': True,
             }
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                logger.info(f"Fetching latest {max_results} videos from {channel_url}")
-                result = ydl.extract_info(channel_url, download=False)
+                for url in target_urls:
+                    logger.info(f"Fetching from {url}")
+                    try:
+                        result = ydl.extract_info(url, download=False)
+                        entries = result.get('entries', [])
+                        
+                        for entry in entries:
+                            video_id = entry['id']
+                            if video_id in seen_ids:
+                                continue
+                                
+                            title = entry.get('title', 'Unknown')
+                            
+                            # Specific filtering for Hao: must be morning live replays
+                            if "@yutinghaofinance" in channel_url:
+                                if not any(kw in title for kw in ["盤前", "皓角", "直播"]):
+                                    continue
+
+                            videos.append({
+                                'url': f"https://www.youtube.com/watch?v={video_id}",
+                                'title': title,
+                                'date': entry.get('upload_date', datetime.now().strftime('%Y%m%d')),
+                                'video_id': video_id,
+                                'duration': entry.get('duration', 0),
+                            })
+                            seen_ids.add(video_id)
+                            
+                            if len(videos) >= max_results * 2:
+                                break
+                    except Exception as e:
+                        logger.warning(f"Error fetching from {url}: {e}")
+
+                # Sort by date and limit
+                videos.sort(key=lambda x: x['date'], reverse=True)
+                final_videos = videos[:max_results]
                 
-                videos = []
-                for entry in result.get('entries', [])[:max_results]:
-                    videos.append({
-                        'url': f"https://www.youtube.com/watch?v={entry['id']}",
-                        'title': entry.get('title', 'Unknown'),
-                        'date': entry.get('upload_date', datetime.now().strftime('%Y%m%d')),
-                        'video_id': entry['id'],
-                        'duration': entry.get('duration', 0),
-                    })
-                
-                logger.info(f"Found {len(videos)} videos from channel")
-                return videos
+                logger.info(f"Found {len(final_videos)} public candidates after filtering")
+                return final_videos
         
         except Exception as e:
-            logger.error(f"Error fetching from YouTube channel: {e}")
+            logger.error(f"Error in fetch_latest_from_channel: {e}")
             return []
     
     def download_audio(self, video_url: str, video_title: str) -> Optional[str]:

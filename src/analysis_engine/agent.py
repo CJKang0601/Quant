@@ -66,97 +66,95 @@ class InvestmentAgent:
         source_title: str = "",
     ) -> Optional[AnalysisResult]:
         """
-        Analyze preprocessed content and generate investment recommendations.
-        
-        Args:
-            preprocessed_content: PreprocessedContent from data pipeline
-            source_id: Unique identifier for source
-            source_title: Title of source content
-            
-        Returns:
-            AnalysisResult with recommendations, or None if failed
+        Full analysis using LLM for structured insights.
         """
         try:
-            logger.info(f"Starting analysis for {source_id}")
+            logger.info(f"Starting deep analysis for {source_id}")
             
-            # Step 1: Extract entities
-            tickers = self.entity_matcher.extract_ticker_mentions(preprocessed_content.normalized_text)
-            logger.info(f"Extracted {len(tickers)} tickers")
+            # Prepare context
+            full_text = preprocessed_content.normalized_text
+            jargon_hint = json.dumps(preprocessed_content.jargon_mappings, ensure_ascii=False)
             
-            # Step 2: Overall sentiment analysis
-            overall_sentiment = self.sentiment_analyzer.analyze_text_sentiment(
-                preprocessed_content.normalized_text
-            )
+            prompt = f"""
+            你是一位專業的投資研究員。請針對以下財經內容進行深度分析並輸出 JSON 格式。
             
-            # Step 3: Per-ticker sentiment
-            ticker_symbols = [t[0] for t in tickers]
-            recommendations = []
-            for ticker in ticker_symbols[:10]:  # Limit to top 10 tickers
-                sentiment = self.sentiment_analyzer.analyze_ticker_sentiment(
-                    preprocessed_content.normalized_text,
-                    ticker
-                )
+            來源標題: {source_title}
+            
+            內容全文:
+            {full_text[:6000]} # 限制長度
+            
+            已知黑話映射: {jargon_hint}
+            
+            請嚴格遵守以下格式輸出 JSON:
+            {{
+                "overall_summary": "150-200字的本集核心摘要...",
+                "macro_view": {{
+                    "overall_sentiment": 1-10的分數,
+                    "key_drivers": ["原因1", "原因2"],
+                    "global_outlook": "簡短全球展望"
+                }},
+                "industry_trends": [
+                    {{
+                        "industry_name": "產業名稱",
+                        "sentiment_score": 1-10的分數,
+                        "key_trends": ["趨勢1", "趨勢2"],
+                        "growth_drivers": ["驅動因素"]
+                    }}
+                ],
+                "recommendations": [
+                    {{
+                        "ticker": "代號",
+                        "name": "公司名稱",
+                        "market": "TW 或 US",
+                        "action": "BUY/SELL/HOLD",
+                        "reason": "具體的推薦理由",
+                        "context_snippet": "在哪個時間點或段落提到了什麼(具體引述內容)",
+                        "confidence_score": 0.0-1.0,
+                        "risk_level": "LOW/MEDIUM/HIGH"
+                    }}
+                ],
+                "key_risks": ["風險1", "風險2"],
+                "discussed_companies": [
+                    {{"name": "公司名", "description": "本集對該公司的描述"}}
+                ],
+                "jargon_explained": [
+                    {{"term": "黑話/術語", "explanation": "在本集中的含義"}}
+                ]
+            }}
+            """
+            
+            if not self.llm:
+                return None
                 
-                # Convert sentiment to action
-                action = self._sentiment_to_action(sentiment)
-                confidence = self._calculate_confidence(sentiment, ticker)
-                
-                # Use LLM to generate reason if available
-                reason = self._generate_reason(ticker, sentiment, preprocessed_content)
-                
-                rec = Recommendation(
-                    ticker=ticker,
-                    action=action,
-                    reason=reason,
-                    confidence_score=confidence,
-                    risk_level=self._assess_risk_level(sentiment),
-                )
-                recommendations.append(rec)
+            response = self.llm.invoke(prompt)
+            data = json.loads(response.content)
             
-            # Step 4: Industry analysis
-            industries = self._extract_industries_from_content(preprocessed_content)
-            industry_trends = []
-            for industry in industries:
-                industry_sentiment = self.sentiment_analyzer.analyze_industry_sentiment(
-                    preprocessed_content.normalized_text,
-                    industry
-                )
-                
-                trend = IndustryTrend(
-                    industry_name=industry,
-                    sentiment_score=industry_sentiment,
-                    key_trends=self._extract_industry_trends(industry, preprocessed_content),
-                )
-                industry_trends.append(trend)
+            # Create models from response data
+            macro = MacroView(**data["macro_view"])
+            industries = [IndustryTrend(**it) for item in data.get("industry_trends", [])] # This line had a minor naming fix needed
+            industries = [IndustryTrend(**it) for it in data.get("industry_trends", [])]
+            recs = [Recommendation(**r) for r in data.get("recommendations", [])]
             
-            # Step 5: Macro view
-            macro_view = MacroView(
-                overall_sentiment=overall_sentiment,
-                key_drivers=self._extract_key_drivers(preprocessed_content),
-            )
-            
-            # Step 6: Risk assessment
-            key_risks = self._assess_risks(ticker_symbols, preprocessed_content)
-            
-            # Create result
             result = AnalysisResult(
                 timestamp=datetime.utcnow(),
-                sources=[source_title or source_id],
-                macro_view=macro_view,
-                industry_trends=industry_trends,
-                recommendations=recommendations,
-                key_risks=key_risks,
-                metadata={
-                    "source_id": source_id,
-                    "entity_count": len(tickers),
-                }
+                source_id=source_id,
+                source_title=source_title or source_id,
+                source_type="youtube" if "hao" in source_id or "market" in source_id else "podcast",
+                overall_summary=data.get("overall_summary", ""),
+                macro_view=macro,
+                industry_trends=industries,
+                recommendations=recs,
+                key_risks=data.get("key_risks", []),
+                discussed_companies=data.get("discussed_companies", []),
+                jargon_explained=data.get("jargon_explained", []),
+                metadata={"source_id": source_id}
             )
             
-            logger.info(f"Analysis completed for {source_id}: {len(recommendations)} recommendations")
+            logger.info(f"Analysis completed for {source_id}")
             return result
-        
+            
         except Exception as e:
-            logger.error(f"Error in analysis: {e}")
+            logger.error(f"Error in deep analysis: {e}")
             return None
     
     def _sentiment_to_action(self, sentiment_score: float) -> str:

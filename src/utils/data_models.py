@@ -15,11 +15,13 @@ class ActionType(str, Enum):
 class Recommendation(BaseModel):
     """Single investment recommendation."""
     ticker: str = Field(..., description="Stock ticker (e.g., '2330.TW', 'NVDA')")
+    name: Optional[str] = Field(None, description="Company name")
+    market: str = Field("TW", description="Market category: TW or US")
     action: ActionType = Field(..., description="BUY, SELL, or HOLD")
     reason: str = Field(..., description="Why this recommendation")
+    context_snippet: str = Field(..., description="Specific text snippet or approx timestamp where this was mentioned")
     confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence [0-1]")
-    target_price: Optional[float] = Field(None, description="Target price if applicable")
-    risk_level: Optional[str] = Field("medium", description="LOW, MEDIUM, HIGH")
+    risk_level: Optional[str] = Field("MEDIUM", description="LOW, MEDIUM, HIGH")
 
 
 class MacroView(BaseModel):
@@ -37,23 +39,19 @@ class IndustryTrend(BaseModel):
     growth_drivers: List[str] = Field(default_factory=list, description="Growth drivers")
 
 
-class RiskManagement(BaseModel):
-    """Risk management details."""
-    overall_exposure_limit: str = Field(default="60%", description="Max portfolio exposure")
-    suggested_stop_loss: str = Field(default="-8%", description="Suggested stop-loss %")
-    suggested_take_profit: Optional[str] = Field(None, description="Suggested take-profit %")
-
-
 class AnalysisResult(BaseModel):
     """Complete analysis result from Agent."""
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Analysis timestamp")
-    sources: List[str] = Field(default_factory=list, description="Source names (e.g., 'Hao_Ep123')")
+    source_id: str = Field(..., description="Source ID")
+    source_title: str = Field(..., description="Source Title")
+    source_type: str = Field(..., description="youtube or podcast")
+    overall_summary: str = Field(..., description="A 150-200 word executive summary of the episode")
     macro_view: Optional[MacroView] = Field(None, description="Macro-level sentiment")
     industry_trends: List[IndustryTrend] = Field(default_factory=list, description="Industry analysis")
     recommendations: List[Recommendation] = Field(default_factory=list, description="Stock recommendations")
     key_risks: List[str] = Field(default_factory=list, description="Overall risks")
-    risk_management: RiskManagement = Field(default_factory=RiskManagement, description="Risk management guidance")
-    raw_analysis: Optional[str] = Field(None, description="Raw LLM analysis output")
+    discussed_companies: List[Dict[str, str]] = Field(default_factory=list, description="Companies mentioned with brief descriptions")
+    jargon_explained: List[Dict[str, str]] = Field(default_factory=list, description="Jargon explained")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
     class Config:
@@ -83,17 +81,3 @@ class PreprocessedContent(BaseModel):
     chunks: List[str] = Field(default_factory=list, description="Text chunks for RAG")
     entities_detected: List[str] = Field(default_factory=list, description="Named entities detected")
     preprocessing_timestamp: datetime = Field(default_factory=datetime.utcnow)
-
-
-class RAGQuery(BaseModel):
-    """Query for RAG vector database."""
-    query_text: str = Field(..., description="Query text")
-    query_type: str = Field(default="general", description="'general', 'sentiment', 'entity'")
-    top_k: int = Field(default=5, description="Number of results to retrieve")
-
-
-class RAGResult(BaseModel):
-    """Result from RAG query."""
-    query_id: str = Field(..., description="Query identifier")
-    matches: List[Dict[str, Any]] = Field(default_factory=list, description="Matched documents")
-    total_results: int = Field(default=0, description="Total matching results")

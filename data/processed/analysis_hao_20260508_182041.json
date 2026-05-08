@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-05-08 10:20:41.388275",
+  "sources": [
+    "公園集合  2024530四直播精選.zh-TW"
+  ],
+  "macro_view": {
+    "overall_sentiment": 10.0,
+    "key_drivers": [
+      "Market volatility"
+    ],
+    "global_outlook": null
+  },
+  "industry_trends": [
+    {
+      "industry_name": "Finance",
+      "sentiment_score": 5.5,
+      "key_trends": [],
+      "growth_drivers": []
+    }
+  ],
+  "recommendations": [
+    {
+      "ticker": "TW",
+      "action": "BUY",
+      "reason": "非常樂觀: Kind captions Language zh-TW 啊 這個 這個是 我也是持有中鋼很久了 這個就是中鋼的砧板 那這邊其實還可以拆卸了 拿下來可以當這個 防彈 對不對 就是如果以後這個 這個股票",
+      "confidence_score": 0.9,
+      "target_price": null,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "ticker": "OK",
+      "action": "BUY",
+      "reason": "非常樂觀: Kind captions Language zh-TW 啊 這個 這個是 我也是持有中鋼很久了 這個就是中鋼的砧板 那這邊其實還可以拆卸了 拿下來可以當這個 防彈 對不對 就是如果以後這個 這個股票",
+      "confidence_score": 0.9,
+      "target_price": null,
+      "risk_level": "MEDIUM"
+    }
+  ],
+  "key_risks": [
+    "General market uncertainty"
+  ],
+  "risk_management": {
+    "overall_exposure_limit": "60%",
+    "suggested_stop_loss": "-8%",
+    "suggested_take_profit": null
+  },
+  "raw_analysis": null,
+  "metadata": {
+    "source_id": "hao_0",
+    "entity_count": 2
+  }
+}

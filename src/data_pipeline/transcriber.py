@@ -30,15 +30,25 @@ class WhisperTranscriber:
     
     def transcribe(self, audio_path: str, language: str = "zh") -> Optional[str]:
         """
-        Transcribe audio file.
+        Transcribe audio file or read subtitle file.
         
         Args:
-            audio_path: Path to audio file
-            language: Language code (e.g., 'zh' for Chinese, 'en' for English)
+            audio_path: Path to audio or subtitle file
+            language: Language code
             
         Returns:
-            Transcribed text, or None if failed
+            Text content or None if failed
         """
+        # Handle subtitle files directly
+        if audio_path.endswith(('.vtt', '.srt')):
+            logger.info(f"Reading subtitle file: {audio_path}")
+            try:
+                with open(audio_path, 'r', encoding='utf-8') as f:
+                    return f.read()
+            except Exception as e:
+                logger.error(f"Error reading subtitle file {audio_path}: {e}")
+                return None
+
         try:
             logger.info(f"Transcribing audio: {audio_path}")
             
@@ -69,26 +79,16 @@ class WhisperTranscriber:
     ) -> Optional[TranscriptionResult]:
         """
         Transcribe audio and return structured result.
-        
-        Args:
-            audio_path: Path to audio file
-            source_id: Unique identifier for source
-            source_type: Type of source ('youtube' or 'podcast')
-            source_title: Title of source content
-            source_url: URL of source (optional)
-            language: Language code
-            metadata: Additional metadata dict
-            
-        Returns:
-            TranscriptionResult or None if failed
         """
         try:
             text = self.transcribe(audio_path, language)
             if not text:
                 return None
             
-            # Get audio duration
-            duration_seconds = self._get_audio_duration(audio_path)
+            # Skip duration check for subtitle files to avoid FFmpeg dependency
+            duration_seconds = 0
+            if not audio_path.endswith(('.vtt', '.srt')):
+                duration_seconds = self._get_audio_duration(audio_path)
             
             result = TranscriptionResult(
                 source_id=source_id,

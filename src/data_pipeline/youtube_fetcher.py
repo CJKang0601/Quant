@@ -107,6 +107,11 @@ class YouTubeFetcher:
                 'outtmpl': str(self.output_dir / safe_title),
                 'quiet': False,
                 'no_warnings': False,
+                # Subtitle settings
+                'writesubtitles': True,
+                'writeautomaticsub': True,
+                'subtitleslangs': ['zh-Hant', 'zh-TW', 'zh-Hans', 'en'],
+                'skip_download': True, # Start by trying to only get subs
                 # Try to bypass bot detection in GitHub Actions
                 'nocheckcertificate': True,
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -117,21 +122,23 @@ class YouTubeFetcher:
                         'skip': ['dash', 'hls'],
                     }
                 },
-                'ignoreerrors': True, # Skip errors like members-only
+                'ignoreerrors': True,
             }
             
-            logger.info(f"Downloading audio from: {video_url}")
+            logger.info(f"Attempting to fetch subtitles for: {video_url}")
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                error_code = ydl.download([video_url])
-                if error_code != 0:
-                    logger.warning(f"Download failed with error code {error_code} for {video_url}")
+                ydl.download([video_url])
             
-            if audio_path.exists():
-                logger.info(f"Audio saved to: {audio_path}")
-                return str(audio_path)
-            else:
-                logger.error(f"Audio file not found after download: {audio_path}")
-                return None
+            # Check for subtitle files (.vtt or .srt)
+            for ext in ['.zh-Hant.vtt', '.zh-TW.vtt', '.zh-Hans.vtt', '.en.vtt', '.vtt']:
+                sub_path = self.output_dir / f"{safe_title}{ext}"
+                if sub_path.exists():
+                    logger.info(f"Subtitle found: {sub_path}")
+                    return str(sub_path)
+            
+            # If no subs, we might need audio (but that needs ffmpeg)
+            logger.warning(f"No subtitles found for {video_url}. Audio download requires FFmpeg.")
+            return None
         
         except Exception as e:
             logger.error(f"Error downloading audio from {video_url}: {e}")

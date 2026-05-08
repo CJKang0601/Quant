@@ -1,9 +1,14 @@
 """Script to update analysis for all configured sources."""
+import os
 from main import MainPipeline
-from config.settings import YOUTUBE_CHANNELS, PODCAST_FEEDS, DATA_PROCESSED_DIR
+from config.settings import YOUTUBE_CHANNELS, PODCAST_FEEDS, DATA_PROCESSED_DIR, FFMPEG_PATH
 from src.utils.logger import get_logger
 from datetime import datetime
 from pathlib import Path
+
+# Add FFmpeg to PATH
+if FFMPEG_PATH and os.path.exists(FFMPEG_PATH):
+    os.environ["PATH"] = FFMPEG_PATH + os.pathsep + os.environ["PATH"]
 
 logger = get_logger(__name__)
 

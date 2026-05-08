@@ -121,10 +121,20 @@ class TextPreprocessor:
         Returns:
             Cleaned text
         """
+        # Handle subtitle files if the transcript looks like a VTT content
+        if "WEBVTT" in text or "-->" in text:
+            logger.info("Detected subtitle format, cleaning timestamps...")
+            # Remove WEBVTT header
+            text = re.sub(r'^WEBVTT.*?\n', '', text, flags=re.DOTALL)
+            # Remove timestamps and metadata (e.g. 00:00:00.000 --> 00:00:05.000)
+            text = re.sub(r'\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}.*?\n', '', text)
+            # Remove remaining tags like <c> or <u>
+            text = re.sub(r'<.*?>', '', text)
+
         # Remove extra whitespace
         text = re.sub(r'\s+', ' ', text).strip()
         
-        # Remove common OCR artifacts
+        # Remove common OCR artifacts (keeping basic punctuation and Chinese characters)
         text = re.sub(r'[^\w\s\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff()-]', '', text)
         
         return text

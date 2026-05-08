@@ -31,6 +31,7 @@ PODCAST_FEEDS = {
 }
 
 # Processing Settings
+FFMPEG_PATH = r"C:\Users\cjkan\Downloads\ffmpeg-2026-05-06-git-f2e5eff3ff-full_build\ffmpeg-2026-05-06-git-f2e5eff3ff-full_build\bin"
 WHISPER_MODEL = os.getenv("WHISPER_MODEL", "base")  # tiny, base, small, medium, large
 MAX_AUDIO_DURATION_HOURS = 4
 CHUNK_SIZE = 300  # Characters per chunk for RAG

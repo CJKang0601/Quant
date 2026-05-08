@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-05-08 06:07:22.759986",
+  "sources": [
+    "EP657"
+  ],
+  "macro_view": {
+    "overall_sentiment": 6.142857142857142,
+    "key_drivers": [
+      "Interest rate movements"
+    ],
+    "global_outlook": null
+  },
+  "industry_trends": [
+    {
+      "industry_name": "Artificial Intelligence",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Growth opportunity",
+        "Investment increase"
+      ],
+      "growth_drivers": []
+    },
+    {
+      "industry_name": "Software",
+      "sentiment_score": 5.5,
+      "key_trends": [
+        "Growth opportunity",
+        "Investment increase"
+      ],
+      "growth_drivers": []
+    }
+  ],
+  "recommendations": [
+    {
+      "ticker": "AI",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "AWS",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "NDS",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "CPU",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "D",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "RAN",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "SSD",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "NAND",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "ESS",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    },
+    {
+      "ticker": "MLC",
+      "action": "HOLD",
+      "reason": "中立偏樂觀: 歡迎收聽古矮為市民公共本集節目由台灣來亞集團全球Number 1醫學美容品牌修理可贊助最近被各種廣告打到都在講母親節我自己也在尋思一件事如果說送理這件事是一種投資你要做短線還是長頭花是短線漂亮一下就沒",
+      "confidence_score": 0.5,
+      "target_price": null,
+      "risk_level": "LOW"
+    }
+  ],
+  "key_risks": [
+    "Market risk"
+  ],
+  "risk_management": {
+    "overall_exposure_limit": "60%",
+    "suggested_stop_loss": "-8%",
+    "suggested_take_profit": null
+  },
+  "raw_analysis": null,
+  "metadata": {
+    "source_id": "gooaye_podcast_2",
+    "entity_count": 14
+  }
+}

@@ -9,6 +9,7 @@ load_dotenv()
 PROJECT_ROOT = Path(__file__).parent.parent
 DATA_RAW_DIR = PROJECT_ROOT / "data" / "raw"
 DATA_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
+PROCESSED_MANIFEST_PATH = PROJECT_ROOT / "data" / "processed_manifest.json"
 
 # API Keys
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -16,7 +17,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
 # LLM Models
-LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4-turbo-preview")
+LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
 # Data Sources
@@ -27,11 +28,20 @@ YOUTUBE_CHANNELS = {
 }
 
 PODCAST_FEEDS = {
-    "gooaye_podcast": "https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml",  # 股癌 Podcast RSS 正確位址
+    "gooaye_podcast": "https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml",  # 股癌 Podcast RSS
+}
+
+# 各來源的顯示資訊與更新節奏(供介面與排程參考)
+SOURCE_INFO = {
+    "hao": {"name": "財經皓角", "cadence": "每日早上 8:30 直播留檔"},
+    "gooaye": {"name": "股癌", "cadence": "每週三、六更新"},
+    "gooaye_podcast": {"name": "股癌 Podcast", "cadence": "每週三、六更新"},
+    "market_anchor": {"name": "定錨產業筆記", "cadence": "不定期(法說會/產業深度)"},
 }
 
 # Processing Settings
-FFMPEG_PATH = r"C:\Users\cjkan\Downloads\ffmpeg-2026-05-06-git-f2e5eff3ff-full_build\ffmpeg-2026-05-06-git-f2e5eff3ff-full_build\bin"
+# 本機若 ffmpeg 不在 PATH,可在 .env 設定 FFMPEG_PATH 指向 ffmpeg 的 bin 目錄
+FFMPEG_PATH = os.getenv("FFMPEG_PATH", "")
 WHISPER_MODEL = os.getenv("WHISPER_MODEL", "base")  # tiny, base, small, medium, large
 MAX_AUDIO_DURATION_HOURS = 4
 CHUNK_SIZE = 300  # Characters per chunk for RAG

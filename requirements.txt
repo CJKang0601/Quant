@@ -1,34 +1,23 @@
-# Core LLM & Agent Framework
-langchain>=0.1.14
+# LLM Clients
 langchain-openai>=0.1.0
 langchain-google-genai>=1.0.7
-llama-index>=0.9.48
 
-# Audio Processing
+# Data Fetching & Transcription
 yt-dlp>=2024.3.10
 feedparser>=6.0.10
-openai-whisper
-setuptools
-faster-whisper>=0.10.0
+faster-whisper>=1.0.0
 
 # Data Processing
 pandas>=2.2.0
-numpy>=1.24.3
 pydantic>=2.6.0
-
-# Vector Database
-pinecone-client>=3.0.2
-chromadb>=0.4.24
 
 # Utilities
 python-dotenv>=1.0.0
 pyyaml>=6.0.1
 requests>=2.31.0
 
-# Logging & Testing
-python-logging-loki>=0.3.1
-pytest>=7.4.3
-pytest-cov>=4.1.0
+# Web UI (local use: streamlit run app.py)
+streamlit>=1.32.0
 
-# Data Validation
-jsonschema==4.21.1
+# Testing
+pytest>=7.4.3

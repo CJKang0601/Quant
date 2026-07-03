@@ -137,8 +137,6 @@ class YouTubeFetcher:
                 'writeautomaticsub': True,
                 'subtitleslangs': ['zh-Hant', 'zh-TW', 'zh-Hans', 'en'],
                 'skip_download': True, # Start by trying to only get subs
-                # Try to bypass bot detection in GitHub Actions
-                'nocheckcertificate': True,
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'referer': 'https://www.google.com/',
                 'extractor_args': {

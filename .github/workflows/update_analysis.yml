@@ -2,7 +2,7 @@ name: Daily Analysis Update
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天午夜執行
+    - cron: '0 5 * * *'  # UTC 05:00 = 台灣 13:00,確保皓角早上直播的留檔與自動字幕已就緒
   workflow_dispatch:      # 允許手動執行
 
 jobs:
@@ -10,15 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write    # 允許 Actions 推送代碼更新到倉庫
-    
+
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+        cache: 'pip'
 
     - name: Install system dependencies
       run: |
@@ -42,6 +43,7 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         mkdir -p data/processed docs
-        git add -f data/processed/analysis_*.json docs/index.html
+        git add -f data/processed/analysis_*.json docs/index.html data/processed_manifest.json
         git commit -m "chore: auto-update analysis data [skip ci]" || echo "No changes to commit"
+        git pull --rebase --autostash origin main || true
         git push

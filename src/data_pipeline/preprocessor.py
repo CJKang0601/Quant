@@ -63,17 +63,16 @@ class JargonMapper:
     
     def normalize_text(self, text: str) -> Tuple[str, Dict[str, str]]:
         """
-        Normalize text by replacing jargon with standard ticker names.
-        
+        Normalize text by annotating jargon with standard ticker names.
+
         Args:
             text: Input text
-            
+
         Returns:
             Tuple of (normalized_text, applied_mappings)
         """
-        normalized_text = text
         applied_mappings = {}
-        
+
         # Get all possible jargon terms
         all_terms = set()
         for category in self.mappings.values():
@@ -82,21 +81,32 @@ class JargonMapper:
                 for value in category.values():
                     if isinstance(value, dict):
                         all_terms.update(value.get('aliases', []))
-        
-        # Sort by length (longest first) to avoid partial replacements
-        sorted_terms = sorted(all_terms, key=len, reverse=True)
-        
-        # Replace jargon in text
+
+        # Sort by length (longest first) so the alternation prefers longer terms
+        sorted_terms = sorted((t for t in all_terms if t), key=len, reverse=True)
+        if not sorted_terms:
+            return text, applied_mappings
+
+        # 中文詞不能用 \b(CJK 字元之間沒有詞邊界),改用單次掃描的 alternation;
+        # 純 ASCII 詞(如 GG、NVDA)仍需邊界以免誤中英文單字的一部分
+        fragments = []
         for term in sorted_terms:
+            escaped = re.escape(term)
+            if re.search(r'[一-鿿]', term):
+                fragments.append(escaped)
+            else:
+                fragments.append(r'(?<![A-Za-z0-9])' + escaped + r'(?![A-Za-z0-9])')
+        pattern = re.compile("|".join(fragments))
+
+        def annotate(match: re.Match) -> str:
+            term = match.group(0)
             ticker = self.get_ticker(term)
-            if ticker and term in text:
-                pattern = re.compile(r'\b' + re.escape(term) + r'\b', re.IGNORECASE)
-                if pattern.search(normalized_text):
-                    replacement = f"{term}({ticker})"
-                    normalized_text = pattern.sub(replacement, normalized_text)
-                    applied_mappings[term] = ticker
-        
-        return normalized_text, applied_mappings
+            if not ticker:
+                return term
+            applied_mappings[term] = ticker
+            return f"{term}({ticker})"
+
+        return pattern.sub(annotate, text), applied_mappings
 
 
 class TextPreprocessor:
@@ -126,6 +136,8 @@ class TextPreprocessor:
             logger.info("Detected subtitle format, cleaning timestamps...")
             # Remove WEBVTT header
             text = re.sub(r'^WEBVTT.*?\n', '', text, flags=re.DOTALL)
+            # Remove metadata header lines (e.g. "Kind: captions", "Language: zh-TW")
+            text = re.sub(r'^(?:Kind|Language):.*$', '', text, flags=re.MULTILINE)
             # Remove timestamps and metadata (e.g. 00:00:00.000 --> 00:00:05.000)
             text = re.sub(r'\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}.*?\n', '', text)
             # Remove remaining tags like <c> or <u>
@@ -133,10 +145,11 @@ class TextPreprocessor:
 
         # Remove extra whitespace
         text = re.sub(r'\s+', ' ', text).strip()
-        
-        # Remove common OCR artifacts (keeping basic punctuation and Chinese characters)
-        text = re.sub(r'[^\w\s\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff()-]', '', text)
-        
+
+        # Remove noise characters. \u5fc5\u9808\u4fdd\u7559\u4e2d\u82f1\u6587\u6a19\u9ede(\u53e5\u5b50\u5207\u5206\u9760 \u3002\uff01\uff1f)
+        # \u8207\u5c0f\u6578\u9ede/\u767e\u5206\u6bd4(ticker \u5982 2330.TW\u3001\u6578\u5b57\u5982 3.5%)
+        text = re.sub(r'[^\w\s\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\u3002\uff01\uff1f\uff0c\u3001\uff1b\uff1a\uff0e.%()\-]', '', text)
+
         return text
     
     def segment_sentences(self, text: str) -> List[str]:
@@ -187,10 +200,19 @@ class TextPreprocessor:
             List of detected entities (tickers, company names, etc.)
         """
         entities = set()
-        
-        # Look for ticker patterns (e.g., 2330.TW, NVDA)
-        ticker_pattern = r'\b[A-Z][A-Z0-9]{0,4}(?:\.TW|\.US)?\b'
-        entities.update(re.findall(ticker_pattern, text))
+
+        # 台股格式代號一定收(如 2330.TW)
+        entities.update(re.findall(r'\b\d{4}\.TW\b', text))
+
+        # 美股型大寫代號需過濾常見縮寫,避免把 OK / TW / AI 當股票
+        ticker_stopwords = {
+            'OK', 'TW', 'US', 'AI', 'IT', 'CEO', 'CFO', 'GDP', 'CPI', 'PPI',
+            'ETF', 'IPO', 'QE', 'FED', 'PMI', 'EPS', 'PE', 'PB', 'API', 'USD',
+            'TWD', 'YOY', 'QOQ', 'MOM', 'HBM', 'LLM', 'GPT', 'PC', 'NB', 'EV',
+        }
+        for match in re.findall(r'\b[A-Z]{2,5}\b', text):
+            if match not in ticker_stopwords:
+                entities.add(match)
         
         # Look for jargon terms
         all_terms = set()

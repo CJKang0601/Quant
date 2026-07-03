@@ -14,19 +14,27 @@ class WhisperTranscriber:
     def __init__(self, model_size: str = "base", device: str = "cpu"):
         """
         Initialize Whisper transcriber.
-        
+
         Args:
             model_size: Model size ('tiny', 'base', 'small', 'medium', 'large')
             device: Device to use ('cpu' or 'cuda')
         """
-        try:
-            import whisper
-            self.whisper = whisper
-            self.model = whisper.load_model(model_size, device=device)
-            logger.info(f"Whisper model loaded: {model_size} on {device}")
-        except ImportError:
-            logger.error("openai-whisper not installed. Install with: pip install openai-whisper")
-            raise
+        self.model_size = model_size
+        self.device = device
+        self._model = None
+
+    @property
+    def model(self):
+        # 懶加載:處理字幕檔(.vtt/.srt)不需要模型,避免無謂下載模型權重
+        if self._model is None:
+            try:
+                import whisper
+            except ImportError:
+                logger.error("openai-whisper not installed. Install with: pip install openai-whisper")
+                raise
+            self._model = whisper.load_model(self.model_size, device=self.device)
+            logger.info(f"Whisper model loaded: {self.model_size} on {self.device}")
+        return self._model
     
     def transcribe(self, audio_path: str, language: str = "zh") -> Optional[str]:
         """
@@ -139,24 +147,33 @@ class FasterWhisperTranscriber(WhisperTranscriber):
     def __init__(self, model_size: str = "base", device: str = "cpu", compute_type: str = "default"):
         """
         Initialize Faster Whisper transcriber.
-        
+
         Args:
             model_size: Model size
             device: Device to use
             compute_type: Compute type ('default', 'int8', 'float16')
         """
-        try:
-            from faster_whisper import WhisperModel
-            self.faster_whisper = WhisperModel
-            self.model = WhisperModel(
-                model_size,
-                device=device,
-                compute_type=compute_type,
+        self.model_size = model_size
+        self.device = device
+        self.compute_type = compute_type
+        self._model = None
+
+    @property
+    def model(self):
+        # 懶加載:處理字幕檔(.vtt/.srt)不需要模型
+        if self._model is None:
+            try:
+                from faster_whisper import WhisperModel
+            except ImportError:
+                logger.error("faster-whisper not installed. Install with: pip install faster-whisper")
+                raise
+            self._model = WhisperModel(
+                self.model_size,
+                device=self.device,
+                compute_type=self.compute_type,
             )
-            logger.info(f"Faster Whisper model loaded: {model_size} on {device}")
-        except ImportError:
-            logger.error("faster-whisper not installed. Install with: pip install faster-whisper")
-            raise
+            logger.info(f"Faster Whisper model loaded: {self.model_size} on {self.device}")
+        return self._model
     
     def transcribe(self, audio_path: str, language: str = "zh") -> Optional[str]:
         """

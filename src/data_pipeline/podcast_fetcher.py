@@ -51,10 +51,17 @@ class PodcastFetcher:
             
             episodes = []
             for entry in feed.entries[:max_episodes]:
+                published_parsed = entry.get('published_parsed')
+                published_date = (
+                    f"{published_parsed.tm_year:04d}-{published_parsed.tm_mon:02d}-{published_parsed.tm_mday:02d}"
+                    if published_parsed else None
+                )
                 episode = {
                     'title': entry.get('title', 'Unknown'),
                     'description': entry.get('summary', ''),
                     'published': entry.get('published', datetime.now().isoformat()),
+                    'published_date': published_date,  # YYYY-MM-DD,趨勢時間軸用
+                    'guid': entry.get('id', '') or entry.get('link', ''),  # 去重用
                     'link': entry.get('link', ''),
                     'audio_url': None,
                 }
@@ -74,6 +81,8 @@ class PodcastFetcher:
                             break
                 
                 if episode['audio_url']:
+                    if not episode['guid']:
+                        episode['guid'] = episode['audio_url']
                     episodes.append(episode)
             
             logger.info(f"Found {len(episodes)} episodes with audio")
@@ -113,11 +122,12 @@ class PodcastFetcher:
                 return str(audio_path)
             
             logger.info(f"Downloading podcast episode: {episode_title}")
-            response = requests.get(audio_url, timeout=60)
-            response.raise_for_status()
-            
-            with open(audio_path, 'wb') as f:
-                f.write(response.content)
+            # 整集音檔可能上百 MB,串流寫入避免整檔進記憶體
+            with requests.get(audio_url, timeout=60, stream=True) as response:
+                response.raise_for_status()
+                with open(audio_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=1024 * 1024):
+                        f.write(chunk)
             
             logger.info(f"Podcast audio saved to: {audio_path}")
             return str(audio_path)

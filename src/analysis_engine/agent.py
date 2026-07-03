@@ -18,12 +18,18 @@ from src.utils.data_models import (
     PreprocessedContent,
 )
 from src.analysis_engine.output_formatter import OutputFormatter
-from config.settings import LLM_MODEL
+from config.settings import LLM_MODEL, LLM_PROVIDER
 
 logger = get_logger(__name__)
 
 SEGMENT_CHAR_LIMIT = 12000  # 單次送進 LLM 的逐字稿字元上限
 MAX_SEGMENTS = 10           # 最多分析段數(控制單集成本上限)
+
+# LLM_MODEL 未指定時,各供應商的預設模型
+DEFAULT_MODELS = {
+    "openai": "gpt-4o-mini",
+    "google": "gemini-2.0-flash",
+}
 
 HORIZON_ALIASES = {
     "SHORT": "SHORT", "短期": "SHORT", "SHORT_TERM": "SHORT",
@@ -115,32 +121,33 @@ SYNTHESIS_PROMPT_TEMPLATE = """你是一位專業的產業研究員。以下是�
 class InvestmentAgent:
     """Agent for AI-driven industry-trend analysis."""
 
-    def __init__(self, llm_provider: str = "openai"):
+    def __init__(self, llm_provider: str = None):
         """
         Initialize Investment Agent.
 
         Args:
-            llm_provider: LLM provider ('openai' or 'google')
+            llm_provider: LLM provider ('openai' or 'google');未指定時採 LLM_PROVIDER 環境變數
         """
-        self.llm_provider = llm_provider
+        self.llm_provider = llm_provider or LLM_PROVIDER
+        self.model = LLM_MODEL or DEFAULT_MODELS.get(self.llm_provider, "gpt-4o-mini")
         self.formatter = OutputFormatter()
         self._initialize_llm()
-        logger.info(f"InvestmentAgent initialized with {llm_provider} ({LLM_MODEL})")
+        logger.info(f"InvestmentAgent initialized with {self.llm_provider} ({self.model})")
 
     def _initialize_llm(self) -> None:
         """Initialize LLM client based on provider."""
         try:
             if self.llm_provider == "openai":
                 from langchain_openai import ChatOpenAI
-                self.llm = ChatOpenAI(model=LLM_MODEL, temperature=0.2)
+                self.llm = ChatOpenAI(model=self.model, temperature=0.2)
             elif self.llm_provider == "google":
                 from langchain_google_genai import ChatGoogleGenerativeAI
-                self.llm = ChatGoogleGenerativeAI(model=LLM_MODEL, temperature=0.2)
+                self.llm = ChatGoogleGenerativeAI(model=self.model, temperature=0.2)
             else:
                 logger.warning(f"Unknown LLM provider: {self.llm_provider}")
                 self.llm = None
-        except ImportError:
-            logger.warning(f"Could not import LLM client for {self.llm_provider}")
+        except Exception as e:
+            logger.warning(f"Could not initialize LLM client for {self.llm_provider}: {e}")
             self.llm = None
 
     def _invoke_text(self, prompt: str) -> str:

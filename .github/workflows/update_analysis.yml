@@ -34,6 +34,9 @@ jobs:
       env:
         OPENAI_API_KEY: ${{ secrets.OPEN_AI_KEY }}
         GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        # OpenAI 帳戶額度用完前先用 Gemini(免費額度);儲值後改回 openai 即可
+        LLM_PROVIDER: google
+        PYTHONUNBUFFERED: '1'
       run: |
         python update_all_sources.py
         python generate_static_site.py
@@ -43,7 +46,14 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         mkdir -p data/processed docs
-        git add -f data/processed/analysis_*.json docs/index.html data/processed_manifest.json
+        git add -f docs/index.html
+        # 分析檔與 manifest 可能不存在(例如全部來源都沒有新集數),不可讓 git add 因 glob 落空而失敗
+        if compgen -G "data/processed/analysis_*.json" > /dev/null; then
+          git add -f data/processed/analysis_*.json
+        fi
+        if [ -f data/processed_manifest.json ]; then
+          git add -f data/processed_manifest.json
+        fi
         git commit -m "chore: auto-update analysis data [skip ci]" || echo "No changes to commit"
         git pull --rebase --autostash origin main || true
         git push

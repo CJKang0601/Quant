@@ -16,8 +16,10 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
-# LLM Models
-LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")
+# LLM Provider & Models
+# LLM_PROVIDER: "openai" 或 "google";LLM_MODEL 留空時採用該供應商的預設模型
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openai")
+LLM_MODEL = os.getenv("LLM_MODEL", "")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
 # Data Sources

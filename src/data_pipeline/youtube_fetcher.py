@@ -141,7 +141,8 @@ class YouTubeFetcher:
                 'referer': 'https://www.google.com/',
                 'extractor_args': {
                     'youtube': {
-                        'player_client': ['android_vr', 'web_embedded'],
+                        # tv client 較常繞過資料中心 IP 的 bot 檢查(GitHub Actions 常被擋)
+                        'player_client': ['tv', 'android_vr', 'web_embedded'],
                         'skip': ['dash', 'hls'],
                     }
                 },

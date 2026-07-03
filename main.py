@@ -40,7 +40,7 @@ class MainPipeline:
             transcriber=self.transcriber,
             preprocessor=self.preprocessor,
         )
-        self.agent = InvestmentAgent(llm_provider="openai")
+        self.agent = InvestmentAgent()  # provider 由 LLM_PROVIDER 環境變數決定
         self.formatter = OutputFormatter()
 
         logger.info("MainPipeline initialized")
